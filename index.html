@@ -1,0 +1,420 @@
+<<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СТРАТЕГИЯ "УМНЫЙГОРОД" | Панель управления</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Инженерные/цифровые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Иконки для метрик -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Сетчатый фон -->
+    <div class="engineering-grid"></div>
+    
+    <!-- Сканирующие линии -->
+    <div class="scan-line"></div>
+    <div class="crosshair"></div>
+    
+    <!-- Панель навигации -->
+    <div class="navigation-panel">
+        <div class="nav-brand">
+            <i class="fas fa-satellite-dish"></i>
+            <span>ВЕКТОР DIGITAL</span>
+        </div>
+        
+        <div class="nav-controls">
+            <button class="nav-btn" id="dashboardBtn" title="Главная панель">
+                <i class="fas fa-home"></i>
+                <span>ГЛАВНАЯ</span>
+            </button>
+            
+            <a href="table.html" class="nav-btn" title="Детальная таблица бюджета">
+                <i class="fas fa-table"></i>
+                <span>ТАБЛИЦА БЮДЖЕТА</span>
+            </a>
+            
+            <a href="gantt.html" class="nav-btn" title="Гант-диаграмма проекта">
+                <i class="fas fa-project-diagram"></i>
+                <span>ГАНТ-ДИАГРАММА</span>
+            </a>
+        </div>
+        
+        <div class="nav-status">
+            <div class="status-indicator">
+                <div class="led active"></div>
+                <span>СИСТЕМА АКТИВНА</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Основной контейнер -->
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Шапка с техпанелью -->
+        <header class="technical-header mb-12">
+            <div class="grid-annotation top-left">SYSTEM: STRATEGY-CONTROL</div>
+            <div class="grid-annotation top-right">ВЕРСИЯ: 4.0</div>
+            
+            <h1 class="digital-display">
+                <span class="segment-display">ПАНЕЛЬ УПРАВЛЕНИЯ</span>
+                <span class="project-codename">"УМНЫЙГОРОД"</span>
+            </h1>
+            
+            <!-- Кнопки быстрого доступа -->
+            <div class="quick-access">
+                <a href="table.html" class="quick-btn">
+                    <i class="fas fa-table"></i>
+                    <span>ТАБЛИЦА БЮДЖЕТА</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="gantt.html" class="quick-btn">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>ГАНТ-ДИАГРАММА</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="status-panel">
+                <div class="status-indicator active">
+                    <div class="led"></div>
+                    <span>СТАТУС: АКТИВНО</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="led warning"></div>
+                    <span>БЮДЖЕТ: 750К ₽</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="led"></div>
+                    <span>СРОК: 28 ДНЕЙ</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="led"></div>
+                    <span>СТУДЕНТЫ: 110</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Технические метрики -->
+        <section class="technical-metrics mb-12">
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div class="metric-value">120%</div>
+                <div class="metric-label">TARGET ROMI</div>
+                <div class="metric-detail">МИНИМАЛЬНЫЙ ПОКАЗАТЕЛЬ</div>
+            </div>
+            
+            <div class="metric-card critical">
+                <div class="metric-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="metric-value">110</div>
+                <div class="metric-label">СТУДЕНТОВ</div>
+                <div class="metric-detail">НЕОБХОДИМО НАБРАТЬ</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-ruble-sign"></i>
+                </div>
+                <div class="metric-value">6 818 ₽</div>
+                <div class="metric-label">MAX CPA</div>
+                <div class="metric-detail">ЦЕЛЕВАЯ СТОИМОСТЬ</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="metric-value">28</div>
+                <div class="metric-label">ДНЕЙ</div>
+                <div class="metric-detail">ОБЩИЙ СРОК ПРОЕКТА</div>
+            </div>
+        </section>
+
+        <!-- Краткий обзор бюджета (упрощенный) -->
+        <section class="budget-overview mb-12">
+            <h2 class="section-title">
+                <i class="fas fa-money-bill-wave"></i>
+                КРАТКИЙ ОБЗОР БЮДЖЕТА
+                <a href="table.html" class="view-all-link">
+                    <span>СМОТРЕТЬ ДЕТАЛИ</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </h2>
+            
+            <div class="budget-cards">
+                <div class="budget-card main">
+                    <div class="budget-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="budget-info">
+                        <h3>АГЕНТСТВО "ВЕКТОР"</h3>
+                        <div class="budget-amount">250 000 ₽</div>
+                        <div class="budget-percent">33.3%</div>
+                    </div>
+                    <div class="budget-status approved">
+                        <i class="fas fa-check-circle"></i>
+                        <span>УТВЕРЖДЕНО</span>
+                    </div>
+                </div>
+                
+                <div class="budget-card">
+                    <div class="budget-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="budget-info">
+                        <h3>PERFORMANCE ADS</h3>
+                        <div class="budget-amount">150 000 ₽</div>
+                        <div class="budget-percent">20%</div>
+                    </div>
+                    <div class="budget-status pending">
+                        <i class="fas fa-clock"></i>
+                        <span>В РАБОТЕ</span>
+                    </div>
+                </div>
+                
+                <div class="budget-card">
+                    <div class="budget-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="budget-info">
+                        <h3>ПРОИЗВОДСТВО</h3>
+                        <div class="budget-amount">150 000 ₽</div>
+                        <div class="budget-percent">20%</div>
+                    </div>
+                    <div class="budget-status pending">
+                        <i class="fas fa-clock"></i>
+                        <span>В РАБОТЕ</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="budget-summary">
+                <div class="summary-item">
+                    <span class="summary-label">ОБЩИЙ БЮДЖЕТ</span>
+                    <span class="summary-value">750 000 ₽</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">РАСПРЕДЕЛЕНО</span>
+                    <span class="summary-value">100%</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">СТАТУС</span>
+                    <span class="summary-value approved">СОГЛАСОВАНО</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция Гант-диаграммы -->
+        <section class="gantt-section mb-12">
+            <div class="section-card">
+                <div class="card-header">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>ПРОЕКТНЫЙ ГРАФИК (ГАНТ-ДИАГРАММА)</h3>
+                </div>
+                <div class="card-content">
+                    <p>Детальная визуализация всех задач проекта на 28 дней с интерактивным управлением и отслеживанием прогресса</p>
+                    <div class="timeline-preview">
+                        <div class="phase">
+                            <div class="phase-label">НЕДЕЛЯ 1</div>
+                            <div class="phase-bar prep">
+                                <span class="task-count">4 задачи</span>
+                            </div>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-label">НЕДЕЛЯ 2</div>
+                            <div class="phase-bar test">
+                                <span class="task-count">5 задач</span>
+                            </div>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-label">НЕДЕЛЯ 3</div>
+                            <div class="phase-bar scale">
+                                <span class="task-count">4 задачи</span>
+                            </div>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-label">НЕДЕЛЯ 4</div>
+                            <div class="phase-bar push">
+                                <span class="task-count">2 задачи</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="gantt.html" class="primary-btn">
+                        <i class="fas fa-external-link-alt"></i>
+                        ОТКРЫТЬ ГАНТ-ДИАГРАММУ
+                    </a>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <i class="fas fa-tasks"></i>
+                            <span>15 задач</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>28 дней</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>2 критических</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Бюджетная схема (диаграмма) -->
+        <section class="blueprint-section mb-12">
+            <h2 class="section-title">
+                <i class="fas fa-sitemap"></i>
+                РАСПРЕДЕЛЕНИЕ БЮДЖЕТА
+                <span class="annotation">СХЕМА №1</span>
+            </h2>
+            
+            <div class="blueprint-container">
+                <!-- Легенда -->
+                <div class="blueprint-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #00ff88;"></div>
+                        <span>Агентство "Вектор"</span>
+                        <span class="legend-value">250K ₽</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #0088ff;"></div>
+                        <span>Performance Ads</span>
+                        <span class="legend-value">150K ₽</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ffaa00;"></div>
+                        <span>Креативы</span>
+                        <span class="legend-value">150K ₽</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ff0088;"></div>
+                        <span>Trust & PR</span>
+                        <span class="legend-value">100K ₽</span>
+                    </div>
+                </div>
+                
+                <!-- Диаграмма бюджета -->
+                <div class="budget-diagram">
+                    <div class="diagram-container">
+                        <div class="diagram-center">
+                            <div class="total-budget">
+                                <span>750 000 ₽</span>
+                                <small>ОБЩИЙ БЮДЖЕТ</small>
+                            </div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 33.3%; --segment-color: #00ff88; --segment-start: 0;">
+                            <div class="segment-label">33.3%</div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 20%; --segment-color: #0088ff; --segment-start: 33.3%;">
+                            <div class="segment-label">20%</div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 20%; --segment-color: #ffaa00; --segment-start: 53.3%;">
+                            <div class="segment-label">20%</div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 13.3%; --segment-color: #ff0088; --segment-start: 73.3%;">
+                            <div class="segment-label">13.3%</div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 6.7%; --segment-color: #aa00ff; --segment-start: 86.6%;">
+                            <div class="segment-label">6.7%</div>
+                        </div>
+                        <div class="diagram-segment" style="--segment-size: 6.7%; --segment-color: #ff4444; --segment-start: 93.3%;">
+                            <div class="segment-label">6.7%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Технические заметки -->
+        <section class="tech-notes mb-12">
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-list"></i>
+                ТЕХНИЧЕСКИЕ ЗАМЕТКИ
+                <span class="annotation">КОММЕНТАРИИ ИНЖЕНЕРА</span>
+            </h2>
+            
+            <div class="notes-grid">
+                <div class="note-card">
+                    <div class="note-header">
+                        <i class="fas fa-crosshairs"></i>
+                        <h3>ЦЕЛЕВЫЕ КАНАЛЫ</h3>
+                    </div>
+                    <div class="note-content">
+                        <ul class="tech-list">
+                            <li>VK Ads (таргет на ВУЗы, тематические паблики)</li>
+                            <li>Telegram Ads (каналы по урбанистике)</li>
+                            <li>Micro-Influencers (YouTube/TG для доверия)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <div class="note-header">
+                        <i class="fas fa-magnet"></i>
+                        <h3>ЛИД-МАГНИТ</h3>
+                    </div>
+                    <div class="note-content">
+                        <p class="monospace">"Интерактивный Городской Диагностический Тест"</p>
+                        <p>→ Сбор контактов + квалификация</p>
+                        <p>→ Автоворонка с кейсами</p>
+                    </div>
+                </div>
+                
+                <div class="note-card important">
+                    <div class="note-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>КРИТИЧЕСКИЕ ТОЧКИ</h3>
+                    </div>
+                    <div class="note-content">
+                        <div class="warning-box">
+                            <i class="fas fa-skull-crossbones"></i>
+                            <p>Согласование креативов (Дни 6-7)</p>
+                        </div>
+                        <p>Любая задержка сдвигает запуск Performance Marketing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Футер -->
+        <footer class="technical-footer">
+            <div class="footer-grid">
+                <div class="footer-item">
+                    <div class="barcode">||| || | |||| | || ||| || | |||| |</div>
+                    <div class="doc-info">ДОКУМЕНТ: STR-UG-CONTROL</div>
+                </div>
+                <div class="footer-item center">
+                    <div class="agency-logo">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>ВЕКТОР DIGITAL AGENCY</span>
+                    </div>
+                    <div class="timestamp" id="current-time">
+                        <!-- Время будет обновляться через JS -->
+                    </div>
+                </div>
+                <div class="footer-item">
+                    <div class="version-info">ВЕРСИЯ: 4.0 | СБОРКА: 2025.12.05</div>
+                    <div class="classification">СИСТЕМА УПРАВЛЕНИЯ ПРОЕКТОМ</div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Подключаем JS -->
+    <script src="script/script.js"></script>
+</body>
+</html>
