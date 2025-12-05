@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТЕХНИЧЕСКАЯ СПЕЦИФИКАЦИЯ | УмныйГород</title>
+    <!-- Подключение Tailwind CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Инженерные/цифровые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Встраиваем стили прямо в HTML чтобы избежать проблем с путями */
+        :root {
+            --grid-color: rgba(0, 255, 255, 0.1);
+            --grid-line: rgba(0, 255, 255, 0.05);
+            --primary-green: #00ff88;
+            --primary-blue: #0088ff;
+            --warning-yellow: #ffaa00;
+            --error-red: #ff4444;
+            --critical-purple: #aa00ff;
+            --background-dark: #0a0a12;
+            --panel-dark: rgba(15, 15, 26, 0.9);
+            --panel-light: rgba(30, 30, 46, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #88ffcc;
+            --text-muted: #6699cc;
+            --border-glow: rgba(0, 255, 255, 0.3);
+            --shadow-glow: 0 0 15px rgba(0, 255, 255, 0.2);
+            --content-bg: rgba(10, 10, 18, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Share Tech Mono', monospace;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: auto;
+            position: relative;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Сетчатый фон */
+        .engineering-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Сканирующая линия */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary-green), 
+                transparent);
+            z-index: 999;
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--primary-green);
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* Перекрестие */
+        .crosshair {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: 100vh;
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .crosshair::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 1px;
+            background: rgba(0, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+        }
+
+        /* Основной контейнер таблицы */
+        .table-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: var(--content-bg);
+            border: 2px solid var(--border-glow);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Шапка таблицы */
+        .table-header {
+            background: var(--panel-dark);
+            padding: 25px;
+            border-bottom: 2px solid var(--primary-green);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary-green), 
+                var(--primary-green), 
+                transparent);
+        }
+
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-item {
+            padding: 10px;
+        }
+
+        .header-item.left {
+            border-right: 1px solid var(--border-glow);
+        }
+
+        .header-item.right {
+            border-left: 1px solid var(--border-glow);
+        }
+
+        .document-code {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .document-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .main-title i {
+            margin-right: 10px;
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .total-summary {
+            text-align: right;
+        }
+
+        .total-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .total-amount {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Навигационные кнопки */
+        .navigation-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--border-glow);
+            padding: 10px;
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--primary-green);
+            color: var(--text-primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--primary-green);
+        }
+
+        /* Таблица */
+        .cyber-table-container {
+            overflow-x: auto;
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            margin: 25px;
+        }
+
+        .cyber-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1200px;
+        }
+
+        .cyber-table th {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--text-secondary);
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--primary-green);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .cyber-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Строки таблицы */
+        .table-row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            background: var(--panel-light);
+        }
+
+        .table-row:hover {
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .table-row.critical {
+            background: rgba(255, 68, 68, 0.05);
+            border-left: 3px solid var(--error-red);
+            animation: row-alert 3s infinite;
+        }
+
+        @keyframes row-alert {
+            0%, 100% { background: rgba(255, 68, 68, 0.05); }
+            50% { background: rgba(255, 68, 68, 0.1); }
+        }
+
+        /* Статусы */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+        }
+
+        .status-badge.approved {
+            border-color: var(--primary-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .status-badge.pending {
+            border-color: var(--warning-yellow);
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .status-badge.planned {
+            border-color: var(--primary-blue);
+            background: rgba(0, 136, 255, 0.1);
+        }
+
+        .status-badge.critical {
+            border-color: var(--error-red);
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        /* Футер */
+        .table-footer-info {
+            padding: 25px;
+            background: var(--panel-dark);
+            border-top: 2px solid var(--primary-green);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 15px;
+            color: var(--text-muted);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-glow);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .header-item.left,
+            .header-item.right {
+                border: none;
+                padding: 10px 0;
+            }
+            
+            .main-title {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            .navigation-controls {
+                position: static;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Простые стили для остальных элементов */
+        .cell-id { text-align: center; font-weight: bold; }
+        .cell-category { font-weight: 600; }
+        .cell-amount { text-align: right; font-family: 'Orbitron', sans-serif; }
+        .cell-percent { text-align: center; }
+        .cell-status { text-align: center; }
+        
+        .table-footer {
+            background: rgba(0, 255, 255, 0.05);
+            font-weight: bold;
+        }
+        
+        .footer-amount {
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-green);
+        }
+        
+        /* Вспомогательные стили */
+        .led {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .barcode {
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Сетчатый фон -->
+    <div class="engineering-grid"></div>
+    
+    <!-- Сканирующие линии -->
+    <div class="scan-line"></div>
+    <div class="crosshair"></div>
+    
+    <!-- Кнопка возврата -->
+    <div class="navigation-controls">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>НА ГЛАВНУЮ</span>
+        </a>
+        <button id="printTable" class="nav-btn" onclick="printTable()">
+            <i class="fas fa-print"></i>
+            <span>ПЕЧАТЬ</span>
+        </button>
+        <button id="exportCSV" class="nav-btn" onclick="exportToCSV()">
+            <i class="fas fa-file-export"></i>
+            <span>ЭКСПОРТ CSV</span>
+        </button>
+    </div>
+    
+    <!-- Основной контент -->
+    <div class="table-container">
+        <!-- Шапка таблицы -->
+        <header class="table-header">
+            <div class="header-grid">
+                <div class="header-item left">
+                    <div class="document-code">DOC: STR-UG-TBL-001</div>
+                    <div class="document-date">Дата: <span id="current-date">05.12.2025</span></div>
+                </div>
+                <div class="header-item center">
+                    <h1 class="main-title">
+                        <i class="fas fa-table"></i>
+                        ТЕХНИЧЕСКАЯ СПЕЦИФИКАЦИЯ
+                    </h1>
+                    <h2 class="subtitle">РАСПРЕДЕЛЕНИЕ БЮДЖЕТА ПРОЕКТА "УМНЫЙГОРОД"</h2>
+                </div>
+                <div class="header-item right">
+                    <div class="total-summary">
+                        <div class="total-label">ОБЩИЙ БЮДЖЕТ:</div>
+                        <div class="total-amount">750 000 ₽</div>
+                    </div>
+                    <div class="status-badge approved" style="margin-top: 10px; display: inline-flex;">
+                        <div class="led"></div>
+                        <span>ДОКУМЕНТ АКТИВЕН</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Главная таблица -->
+        <section class="main-table-section">
+            <div class="cyber-table-container">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th class="col-id">№</th>
+                            <th class="col-category">КАТЕГОРИЯ РАСХОДОВ</th>
+                            <th class="col-details">ТЕХНИЧЕСКИЕ ДЕТАЛИ</th>
+                            <th class="col-amount">СУММА (₽)</th>
+                            <th class="col-percent">ДОЛЯ (%)</th>
+                            <th class="col-status">СТАТУС</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Строка 1 -->
+                        <tr class="table-row">
+                            <td class="cell-id">01</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-cogs" style="color: var(--primary-green);"></i>
+                                    <span>АГЕНТСТВО "ВЕКТОР"</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">Команда "Вектор" (50% загрузка, 4 недели работы)</td>
+                            <td class="cell-amount">250 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 33.3%; height: 100%; background: var(--primary-green); border-radius: 4px;"></div>
+                                    </div>
+                                    <span>33.3%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge approved">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>УТВЕРЖДЕНО</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 2 -->
+                        <tr class="table-row">
+                            <td class="cell-id">02</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-rocket" style="color: var(--primary-green);"></i>
+                                    <span>PERFORMANCE MARKETING</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">VK Ads + Telegram Ads (CPA оптимизация)</td>
+                            <td class="cell-amount">150 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 20%; height: 100%; background: var(--primary-green); border-radius: 4px;"></div>
+                                    </div>
+                                    <span>20%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge pending">
+                                    <i class="fas fa-clock"></i>
+                                    <span>В РАБОТЕ</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 3 -->
+                        <tr class="table-row">
+                            <td class="cell-id">03</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-film" style="color: var(--primary-green);"></i>
+                                    <span>ПРОИЗВОДСТВО КРЕАТИВОВ</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">1 промо-ролик + 5 анимированных креативов</td>
+                            <td class="cell-amount">150 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 20%; height: 100%; background: var(--primary-green); border-radius: 4px;"></div>
+                                    </div>
+                                    <span>20%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge pending">
+                                    <i class="fas fa-clock"></i>
+                                    <span>В РАБОТЕ</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 4 -->
+                        <tr class="table-row">
+                            <td class="cell-id">04</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-bullhorn" style="color: var(--primary-green);"></i>
+                                    <span>TRUST & PR</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">2 микро-инфлюенсера + 1 PR-статья</td>
+                            <td class="cell-amount">100 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 13.3%; height: 100%; background: var(--primary-green); border-radius: 4px;"></div>
+                                    </div>
+                                    <span>13.3%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge planned">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>ПЛАНИРУЕТСЯ</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 5 -->
+                        <tr class="table-row">
+                            <td class="cell-id">05</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-tachometer-alt" style="color: var(--primary-green);"></i>
+                                    <span>OPTIMIZATION & ANALYTICS</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">Оптимизация LP, A/B тесты, аналитика</td>
+                            <td class="cell-amount">50 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 6.7%; height: 100%; background: var(--primary-green); border-radius: 4px;"></div>
+                                    </div>
+                                    <span>6.7%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge planned">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>ПЛАНИРУЕТСЯ</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 6 (Критическая) -->
+                        <tr class="table-row critical">
+                            <td class="cell-id">06</td>
+                            <td class="cell-category">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-exclamation-triangle" style="color: var(--error-red);"></i>
+                                    <span>РЕЗЕРВНЫЙ ФОНД</span>
+                                </div>
+                            </td>
+                            <td class="cell-details">Буфер на дополнительные тесты / бонус агентству</td>
+                            <td class="cell-amount" style="color: var(--error-red);">50 000</td>
+                            <td class="cell-percent">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                        <div style="width: 6.7%; height: 100%; background: var(--error-red); border-radius: 4px; animation: pulse 2s infinite;"></div>
+                                    </div>
+                                    <span style="color: var(--error-red);">6.7%</span>
+                                </div>
+                            </td>
+                            <td class="cell-status">
+                                <div class="status-badge critical">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>КРИТИЧЕСКИЙ</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-footer">
+                            <td colspan="3" style="padding: 20px 15px; font-weight: bold;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-calculator" style="color: var(--primary-green);"></i>
+                                    <span>ИТОГО ПО ПРОЕКТУ:</span>
+                                </div>
+                            </td>
+                            <td class="footer-amount" style="padding: 20px 15px;">
+                                <div style="display: flex; align-items: baseline; gap: 5px;">
+                                    <span style="font-size: 1.8rem;">750 000</span>
+                                    <span style="font-size: 1.4rem; color: var(--text-muted);">₽</span>
+                                </div>
+                            </td>
+                            <td style="padding: 20px 15px; text-align: center;">
+                                <span style="font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 700;">100%</span>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">от общего бюджета</div>
+                            </td>
+                            <td style="padding: 20px 15px; text-align: center;">
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 15px; background: rgba(0,255,136,0.1); border: 1px solid var(--primary-green); border-radius: 6px; color: var(--primary-green); font-weight: 600;">
+                                    <i class="fas fa-check-double"></i>
+                                    <span>БЮДЖЕТ СОГЛАСОВАН</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+        <!-- Футер таблицы -->
+        <footer class="table-footer-info">
+            <div class="footer-grid">
+                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
+                        <i class="fas fa-qrcode"></i>
+                        <span>ДОКУМЕНТ</span>
+                    </div>
+                    <div class="barcode">
+                        ████████████████████████████████████
+                    </div>
+                    <div style="font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+                        ID: BUD-UG-2025-001-TBL
+                    </div>
+                </div>
+                
+                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>СТАТУС</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">Версия:</span>
+                            <strong style="color: var(--text-primary); font-family: 'Orbitron', sans-serif;">3.14</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">Дата обновления:</span>
+                            <strong style="color: var(--text-primary);">05.12.2025</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">Уровень доступа:</span>
+                            <strong style="color: var(--error-red);">КОММЕРЧЕСКАЯ ТАЙНА</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
+                        <i class="fas fa-download"></i>
+                        <span>ЭКСПОРТ</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button class="export-btn" onclick="exportToPDF()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-file-pdf" style="color: #f87171;"></i>
+                            <span>PDF</span>
+                        </button>
+                        <button class="export-btn" onclick="exportToExcel()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-file-excel" style="color: #4ade80;"></i>
+                            <span>Excel</span>
+                        </button>
+                        <button class="export-btn" onclick="exportToCSV()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-file-csv" style="color: #38bdf8;"></i>
+                            <span>CSV</span>
+                        </button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; justify-content: center;">
+                        <i class="fas fa-clock"></i>
+                        <span id="footer-time">05.12.2025 | 14:30:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <i class="fas fa-satellite-dish" style="color: var(--primary-green); margin-right: 8px;"></i>
+                ВЕКТОР DIGITAL AGENCY © 2025 | СИСТЕМА УПРАВЛЕНИЯ БЮДЖЕТОМ v2.0
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript прямо в HTML -->
+    <script>
+        // Установка дат
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('ru-RU');
+            const timeString = now.toLocaleTimeString('ru-RU');
+            
+            // Установка даты в шапке
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                dateElement.textContent = dateString;
+            }
+            
+            // Установка времени в футере
+            const timeElement = document.getElementById('footer-time');
+            if (timeElement) {
+                timeElement.textContent = `${dateString} | ${timeString}`;
+            }
+            
+            // Обновление времени каждую секунду
+            setInterval(() => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ru-RU');
+                const dateString = now.toLocaleDateString('ru-RU');
+                
+                if (timeElement) {
+                    timeElement.textContent = `${dateString} | ${timeString}`;
+                }
+            }, 1000);
+        });
+
+        // Функции для кнопок
+        function printTable() {
+            alert('Функция печати будет работать после добавления стилей для печати');
+            // window.print();
+        }
+
+        function exportToCSV() {
+            const rows = document.querySelectorAll('.table-row');
+            let csvContent = "Номер;Категория;Описание;Сумма (₽);Доля (%);Статус\n";
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = [
+                    cells[0]?.textContent || '',
+                    cells[1]?.textContent || '',
+                    cells[2]?.textContent || '',
+                    cells[3]?.textContent || '',
+                    cells[4]?.querySelector('span')?.textContent || '',
+                    cells[5]?.querySelector('.status-badge span')?.textContent || ''
+                ];
+                
+                csvContent += rowData.join(';') + '\n';
+            });
+            
+            // Добавляем итоги
+            csvContent += `\nИТОГО;;;750 000;100;БЮДЖЕТ СОГЛАСОВАН`;
+            
+            // Создаем и скачиваем файл
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `бюджет_умныйгород_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('CSV файл успешно экспортирован!', 'success');
+        }
+
+        function exportToPDF() {
+            showNotification('Экспорт в PDF будет доступен в следующем обновлении', 'info');
+        }
+
+        function exportToExcel() {
+            showNotification('Экспорт в Excel будет доступен в следующем обновлении', 'info');
+        }
+
+        function showNotification(message, type) {
+            // Создаем элемент уведомления
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(0, 255, 136, 0.2)' : 'rgba(0, 136, 255, 0.2)'};
+                border: 1px solid var(--border-glow);
+                border-radius: 5px;
+                padding: 15px 20px;
+                color: var(--text-primary);
+                font-family: 'Rajdhani', sans-serif;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                z-index: 10001;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}" 
+                       style="color: ${type === 'success' ? 'var(--primary-green)' : 'var(--primary-blue)'};"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            // Добавляем анимацию
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Автоматическое закрытие через 3 секунды
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // Добавляем горячие клавиши
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + P для печати
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printTable();
+            }
+            
+            // Ctrl + S для сохранения CSV
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                exportToCSV();
+            }
+            
+            // Escape для возврата
+            if (e.key === 'Escape') {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
