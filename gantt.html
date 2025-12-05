@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ГАНТ-ДИАГРАММА | УмныйГород</title>
+    <!-- Подключение Tailwind CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Инженерные/цифровые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --grid-color: rgba(0, 255, 255, 0.1);
+            --grid-line: rgba(0, 255, 255, 0.05);
+            --primary-green: #00ff88;
+            --primary-blue: #0088ff;
+            --warning-yellow: #ffaa00;
+            --error-red: #ff4444;
+            --background-dark: #0a0a12;
+            --panel-dark: rgba(15, 15, 26, 0.9);
+            --text-primary: #ffffff;
+            --text-secondary: #88ffcc;
+            --border-glow: rgba(0, 255, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Share Tech Mono', monospace;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Сетчатый фон */
+        .engineering-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Навигация */
+        .navigation-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--border-glow);
+            padding: 10px;
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--primary-green);
+            color: var(--text-primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--primary-green);
+        }
+
+        /* Основной контейнер */
+        .gantt-container {
+            max-width: 1400px;
+            margin: 80px auto 20px;
+            background: rgba(10, 10, 18, 0.85);
+            border: 2px solid var(--border-glow);
+            border-radius: 10px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Шапка */
+        .gantt-header {
+            background: var(--panel-dark);
+            padding: 25px;
+            border-bottom: 2px solid var(--primary-green);
+            text-align: center;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Панель управления */
+        .gantt-controls {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-glow);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-label {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        .control-select {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-glow);
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: 'Share Tech Mono', monospace;
+            min-width: 150px;
+        }
+
+        /* Легенда */
+        .gantt-legend {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-glow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        /* Основная область Ганта */
+        .gantt-main-area {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        /* Ось времени */
+        .timeline-container {
+            position: relative;
+            height: 60px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-green);
+        }
+
+        .timeline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+        }
+
+        .week-marker {
+            flex: 1;
+            border-right: 1px solid var(--border-glow);
+            position: relative;
+        }
+
+        .week-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .day-markers {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+        }
+
+        .day-marker {
+            flex: 1;
+            height: 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .day-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Задачи */
+        .tasks-container {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            height: 40px;
+        }
+
+        .task-label {
+            width: 250px;
+            padding-right: 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .task-bar-container {
+            flex: 1;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-bar {
+            position: absolute;
+            height: 100%;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000;
+            transition: all 0.3s ease;
+        }
+
+        .task-bar:hover {
+            transform: scaleY(1.1);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* Цвета задач */
+        .task-prep { background: #fde047; }
+        .task-test { background: #38bdf8; }
+        .task-scale { background: #4ade80; }
+        .task-push { background: #f87171; }
+        .task-critical { background: #dc2626; animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Критический путь */
+        .critical-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--error-red);
+            pointer-events: none;
+            z-index: 5;
+            animation: path-glow 3s infinite;
+        }
+
+        @keyframes path-glow {
+            0%, 100% { opacity: 0.5; box-shadow: 0 0 10px var(--error-red); }
+            50% { opacity: 1; box-shadow: 0 0 20px var(--error-red); }
+        }
+
+        /* Футер */
+        .gantt-footer {
+            padding: 20px;
+            background: var(--panel-dark);
+            border-top: 2px solid var(--primary-green);
+            text-align: center;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .gantt-container {
+                margin-top: 100px;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .task-label {
+                width: 200px;
+                font-size: 0.8rem;
+            }
+            
+            .navigation-controls {
+                top: 10px;
+                left: 10px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Сетчатый фон -->
+    <div class="engineering-grid"></div>
+    
+    <!-- Навигация -->
+    <div class="navigation-controls">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>ГЛАВНАЯ</span>
+        </a>
+        <button onclick="zoomIn()" class="nav-btn">
+            <i class="fas fa-search-plus"></i>
+            <span>ПРИБЛИЗИТЬ</span>
+        </button>
+        <button onclick="zoomOut()" class="nav-btn">
+            <i class="fas fa-search-minus"></i>
+            <span>ОТДАЛИТЬ</span>
+        </button>
+        <button onclick="exportGantt()" class="nav-btn">
+            <i class="fas fa-download"></i>
+            <span>ЭКСПОРТ</span>
+        </button>
+    </div>
+    
+    <!-- Основной контейнер -->
+    <div class="gantt-container">
+        <!-- Шапка -->
+        <header class="gantt-header">
+            <h1 class="main-title">
+                <i class="fas fa-project-diagram"></i>
+                ГАНТ-ДИАГРАММА ПРОЕКТА
+            </h1>
+            <h2 class="subtitle">"УМНЫЙГОРОД" - 28 ДНЕЙ РЕАЛИЗАЦИИ</h2>
+        </header>
+        
+        <!-- Панель управления -->
+        <div class="gantt-controls">
+            <div class="control-group">
+                <span class="control-label">ФИЛЬТР:</span>
+                <select class="control-select" onchange="filterTasks(this.value)">
+                    <option value="all">ВСЕ ЗАДАЧИ</option>
+                    <option value="critical">ТОЛЬКО КРИТИЧЕСКИЕ</option>
+                    <option value="active">ТОЛЬКО АКТИВНЫЕ</option>
+                    <option value="prep">ПОДГОТОВКА</option>
+                    <option value="test">ТЕСТИРОВАНИЕ</option>
+                    <option value="scale">МАСШТАБИРОВАНИЕ</option>
+                    <option value="push">ФИНАЛЬНЫЙ ПУШ</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <span class="control-label">МАСШТАБ:</span>
+                <select class="control-select" onchange="changeScale(this.value)">
+                    <option value="1">1 ДЕНЬ = 20px</option>
+                    <option value="1.5" selected>1 ДЕНЬ = 30px</option>
+                    <option value="2">1 ДЕНЬ = 40px</option>
+                    <option value="0.5">1 ДЕНЬ = 15px</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <button onclick="showToday()" class="nav-btn">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>ТЕКУЩИЙ ДЕНЬ</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Легенда -->
+        <div class="gantt-legend">
+            <div class="legend-item">
+                <div class="legend-color task-prep"></div>
+                <span>ФАЗА 1: ПОДГОТОВКА (Дни 1-7)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color task-test"></div>
+                <span>ФАЗА 2: ТЕСТИРОВАНИЕ (Дни 8-14)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color task-scale"></div>
+                <span>ФАЗА 3: МАСШТАБИРОВАНИЕ (Дни 15-21)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color task-push"></div>
+                <span>ФАЗА 4: ФИНАЛЬНЫЙ ПУШ (Дни 22-28)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color task-critical"></div>
+                <span>КРИТИЧЕСКИЕ ТОЧКИ</span>
+            </div>
+        </div>
+        
+        <!-- Основная область -->
+        <div class="gantt-main-area">
+            <!-- Ось времени -->
+            <div class="timeline-container">
+                <div class="timeline">
+                    <!-- 4 недели -->
+                    <div class="week-marker">
+                        <div class="week-label">НЕДЕЛЯ 1</div>
+                    </div>
+                    <div class="week-marker">
+                        <div class="week-label">НЕДЕЛЯ 2</div>
+                    </div>
+                    <div class="week-marker">
+                        <div class="week-label">НЕДЕЛЯ 3</div>
+                    </div>
+                    <div class="week-marker">
+                        <div class="week-label">НЕДЕЛЯ 4</div>
+                    </div>
+                </div>
+                
+                <!-- Дни -->
+                <div class="day-markers" id="dayMarkers">
+                    <!-- Дни будут добавлены через JS -->
+                </div>
+            </div>
+            
+            <!-- Критический путь -->
+            <div class="critical-path"></div>
+            
+            <!-- Задачи -->
+            <div class="tasks-container" id="tasksContainer">
+                <!-- Задачи будут добавлены через JS -->
+            </div>
+        </div>
+        
+        <!-- Футер -->
+        <footer class="gantt-footer">
+            <div class="copyright">
+                <i class="fas fa-satellite-dish"></i>
+                ВЕКТОР DIGITAL AGENCY © 2025 | СИСТЕМА УПРАВЛЕНИЯ ПРОЕКТАМИ v3.0
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Данные для Ганта
+        const tasks = [
+            // Фаза 1: Подготовка (желтый)
+            { id: 1, name: "Стратегия, Брифинг", start: 1, duration: 2, phase: "prep", critical: false },
+            { id: 2, name: "LP + Лид-магнит", start: 1, duration: 4, phase: "prep", critical: false },
+            { id: 3, name: "Производство Креативов", start: 3, duration: 4, phase: "prep", critical: false },
+            { id: 4, name: "СОГЛАСОВАНИЕ КРЕАТИВОВ", start: 6, duration: 2, phase: "prep", critical: true },
+            
+            // Фаза 2: Тестирование (синий)
+            { id: 5, name: "Финальный Монтаж ролика", start: 8, duration: 2, phase: "test", critical: false },
+            { id: 6, name: "Запуск Тестов VK/TG Ads", start: 8, duration: 3, phase: "test", critical: false },
+            { id: 7, name: "PR: Статья в медиа", start: 10, duration: 4, phase: "test", critical: false },
+            { id: 8, name: "1-й Micro-Influencer", start: 12, duration: 3, phase: "test", critical: false },
+            { id: 9, name: "Сбор базы лидов", start: 8, duration: 7, phase: "test", critical: false },
+            
+            // Фаза 3: Масштабирование (зеленый)
+            { id: 10, name: "МАСШТАБИРОВАНИЕ Performance Ads", start: 15, duration: 14, phase: "scale", critical: false },
+            { id: 11, name: "Email/TG Рассылка по базе", start: 15, duration: 14, phase: "scale", critical: false },
+            { id: 12, name: "2-й Micro-Influencer", start: 18, duration: 4, phase: "scale", critical: false },
+            { id: 13, name: "Community Management", start: 15, duration: 14, phase: "scale", critical: false },
+            
+            // Фаза 4: Финальный пуш (красный)
+            { id: 14, name: "ФИНАЛЬНЫЙ ОФФЕР", start: 25, duration: 4, phase: "push", critical: true },
+            { id: 15, name: "Анализ и Сводный Отчет", start: 28, duration: 1, phase: "push", critical: false }
+        ];
+
+        // Глобальные переменные
+        let currentScale = 1.5;
+        let currentFilter = 'all';
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            createDayMarkers();
+            createTasks();
+            updateCriticalPath();
+            
+            // Показать текущий день
+            const today = new Date().getDate();
+            showDay(today > 0 && today <= 28 ? today : 1);
+        });
+
+        // Создание маркеров дней
+        function createDayMarkers() {
+            const container = document.getElementById('dayMarkers');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 28; i++) {
+                const dayMarker = document.createElement('div');
+                dayMarker.className = 'day-marker';
+                
+                const dayLabel = document.createElement('div');
+                dayLabel.className = 'day-label';
+                dayLabel.textContent = i;
+                
+                // Выделение воскресений
+                if (i % 7 === 0) {
+                    dayMarker.style.borderRight = '2px solid var(--primary-green)';
+                }
+                
+                dayMarker.appendChild(dayLabel);
+                container.appendChild(dayMarker);
+            }
+        }
+
+        // Создание задач
+        function createTasks() {
+            const container = document.getElementById('tasksContainer');
+            container.innerHTML = '';
+            
+            tasks.forEach(task => {
+                if (shouldShowTask(task)) {
+                    createTaskElement(task);
+                }
+            });
+        }
+
+        // Создание элемента задачи
+        function createTaskElement(task) {
+            const taskRow = document.createElement('div');
+            taskRow.className = 'task-row';
+            taskRow.id = `task-${task.id}`;
+            
+            // Метка задачи
+            const taskLabel = document.createElement('div');
+            taskLabel.className = 'task-label';
+            taskLabel.innerHTML = `
+                <strong>${task.name}</strong><br>
+                <small>Дни ${task.start}-${task.start + task.duration - 1}</small>
+            `;
+            
+            // Контейнер для полоски задачи
+            const taskBarContainer = document.createElement('div');
+            taskBarContainer.className = 'task-bar-container';
+            
+            // Полоска задачи
+            const taskBar = document.createElement('div');
+            taskBar.className = `task-bar task-${task.phase} ${task.critical ? 'task-critical' : ''}`;
+            taskBar.style.left = `${(task.start - 1) * 30 * currentScale}px`;
+            taskBar.style.width = `${task.duration * 30 * currentScale}px`;
+            taskBar.textContent = `${task.duration}д`;
+            taskBar.title = `${task.name}\nНачало: день ${task.start}\nДлительность: ${task.duration} дней`;
+            
+            // Добавление иконки для критических задач
+            if (task.critical) {
+                taskBar.innerHTML += ` <i class="fas fa-exclamation-circle"></i>`;
+            }
+            
+            taskBarContainer.appendChild(taskBar);
+            taskRow.appendChild(taskLabel);
+            taskRow.appendChild(taskBarContainer);
+            
+            document.getElementById('tasksContainer').appendChild(taskRow);
+        }
+
+        // Обновление критического пути
+        function updateCriticalPath() {
+            const criticalTasks = tasks.filter(task => task.critical);
+            if (criticalTasks.length > 0) {
+                const firstCritical = criticalTasks[0];
+                const path = document.querySelector('.critical-path');
+                path.style.left = `${(firstCritical.start - 1) * 30 * currentScale}px`;
+                path.style.width = `${28 * 30 * currentScale}px`;
+            }
+        }
+
+        // Фильтрация задач
+        function filterTasks(filter) {
+            currentFilter = filter;
+            createTasks();
+        }
+
+        // Проверка, нужно ли показывать задачу
+        function shouldShowTask(task) {
+            if (currentFilter === 'all') return true;
+            if (currentFilter === 'critical') return task.critical;
+            if (currentFilter === 'active') return task.start <= 14; // Пример активных задач
+            return task.phase === currentFilter;
+        }
+
+        // Изменение масштаба
+        function changeScale(scale) {
+            currentScale = parseFloat(scale);
+            createTasks();
+            updateCriticalPath();
+        }
+
+        // Приближение
+        function zoomIn() {
+            currentScale = Math.min(3, currentScale + 0.25);
+            updateScaleSelect();
+            createTasks();
+            updateCriticalPath();
+        }
+
+        // Отдаление
+        function zoomOut() {
+            currentScale = Math.max(0.5, currentScale - 0.25);
+            updateScaleSelect();
+            createTasks();
+            updateCriticalPath();
+        }
+
+        // Обновление выбора масштаба
+        function updateScaleSelect() {
+            const scaleSelect = document.querySelector('.control-select[onchange*="changeScale"]');
+            if (scaleSelect) {
+                scaleSelect.value = currentScale;
+            }
+        }
+
+        // Показать текущий день
+        function showToday() {
+            const today = new Date().getDate();
+            showDay(today > 0 && today <= 28 ? today : 1);
+        }
+
+        // Показать конкретный день
+        function showDay(day) {
+            const container = document.querySelector('.gantt-main-area');
+            const scrollPosition = (day - 1) * 30 * currentScale - 200;
+            container.scrollTo({
+                left: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            });
+            
+            // Подсветка дня
+            const dayMarkers = document.querySelectorAll('.day-marker');
+            dayMarkers.forEach((marker, index) => {
+                if (index === day - 1) {
+                    marker.style.background = 'rgba(0, 255, 136, 0.3)';
+                    marker.style.boxShadow = '0 0 10px var(--primary-green)';
+                } else {
+                    marker.style.background = '';
+                    marker.style.boxShadow = '';
+                }
+            });
+        }
+
+        // Экспорт
+        function exportGantt() {
+            const data = {
+                project: "УмныйГород",
+                tasks: tasks,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `gantt_умныйгород_${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('Гант-диаграмма экспортирована в JSON', 'success');
+        }
+
+        // Показать уведомление
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(0, 255, 136, 0.2)' : 'rgba(0, 136, 255, 0.2)'};
+                border: 1px solid var(--border-glow);
+                border-radius: 5px;
+                padding: 15px 20px;
+                color: var(--text-primary);
+                font-family: 'Rajdhani', sans-serif;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                z-index: 10001;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}" 
+                    style="color: ${type === 'success' ? 'var(--primary-green)' : 'var(--primary-blue)'};"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // Горячие клавиши
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + + для приближения
+            if ((e.ctrlKey && e.key === '+') || (e.ctrlKey && e.key === '=')) {
+                e.preventDefault();
+                zoomIn();
+            }
+            
+            // Ctrl + - для отдаления
+            if (e.ctrlKey && e.key === '-') {
+                e.preventDefault();
+                zoomOut();
+            }
+            
+            // Escape для возврата
+            if (e.key === 'Escape') {
+                window.location.href = 'index.html';
+            }
+            
+            // Стрелки для навигации
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                const currentScroll = document.querySelector('.gantt-main-area').scrollLeft;
+                document.querySelector('.gantt-main-area').scrollBy({ left: 100, behavior: 'smooth' });
+            }
+            
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                document.querySelector('.gantt-main-area').scrollBy({ left: -100, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
