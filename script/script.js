@@ -180,17 +180,17 @@ function createGanttTasks() {
     // Задачи для Ганта
     const tasks = [
         // Подготовка (желтый)
-        { id: 1, name: "1. Стратегия, Брифинг", start: 1, duration: 2, color: "#fde047", critical: false },
-        { id: 2, name: "2. LP + Лид-магнит", start: 1, duration: 4, color: "#fde047", critical: false },
-        { id: 3, name: "3. Производство Креативов", start: 3, duration: 4, color: "#fde047", critical: false },
-        { id: 4, name: "4. СОГЛАСОВАНИЕ КРЕАТИВОВ", start: 6, duration: 2, color: "#f87171", critical: true },
+        { id: 1, name: "1. Стратегия, Брифинг", start: 1, duration: 2, color: "#4ade80", critical: false },
+        { id: 2, name: "2. LP + Лид-магнит", start: 1, duration: 4, color: "#4ade80", critical: false },
+        { id: 3, name: "3. Производство Креативов", start: 3, duration: 4, color: "#4ade80", critical: false },
+        { id: 4, name: "4. СОГЛАСОВАНИЕ КРЕАТИВОВ", start: 6, duration: 2, color: "#4ade80", critical: true },
         
         // Тестирование (синий)
-        { id: 5, name: "5. Финальный Монтаж", start: 8, duration: 2, color: "#38bdf8", critical: false },
-        { id: 6, name: "6. Запуск Тестов Ads", start: 8, duration: 3, color: "#38bdf8", critical: false },
-        { id: 7, name: "7. PR: Статья в медиа", start: 10, duration: 4, color: "#38bdf8", critical: false },
-        { id: 8, name: "8. 1-й Influencer", start: 12, duration: 3, color: "#38bdf8", critical: false },
-        { id: 9, name: "9. Сбор базы лидов", start: 8, duration: 7, color: "#38bdf8", critical: false },
+        { id: 5, name: "5. Финальный Монтаж", start: 8, duration: 2, color: "#4ade80", critical: false },
+        { id: 6, name: "6. Запуск Тестов Ads", start: 8, duration: 3, color: "#4ade80", critical: false },
+        { id: 7, name: "7. PR: Статья в медиа", start: 10, duration: 4, color: "#4ade80", critical: false },
+        { id: 8, name: "8. 1-й Influencer", start: 12, duration: 3, color: "#4ade80", critical: false },
+        { id: 9, name: "9. Сбор базы лидов", start: 8, duration: 7, color: "#4ade80", critical: false },
         
         // Масштабирование (зеленый)
         { id: 10, name: "10. МАСШТАБИРОВАНИЕ Ads", start: 15, duration: 14, color: "#4ade80", critical: false },
@@ -199,8 +199,8 @@ function createGanttTasks() {
         { id: 13, name: "13. Community Management", start: 15, duration: 14, color: "#4ade80", critical: false },
         
         // Финальный пуш (красный)
-        { id: 14, name: "14. ФИНАЛЬНЫЙ ОФФЕР", start: 25, duration: 4, color: "#f87171", critical: true },
-        { id: 15, name: "15. Анализ и Отчет", start: 28, duration: 1, color: "#94a3b8", critical: false }
+        { id: 14, name: "14. ФИНАЛЬНЫЙ ОФФЕР", start: 25, duration: 4, color: "#4ade80", critical: true },
+        { id: 15, name: "15. Анализ и Отчет", start: 28, duration: 1, color: "#4ade80", critical: false }
     ];
     
     // Очищаем контейнер
@@ -316,7 +316,7 @@ function addHoverEffects() {
     const previewRows = document.querySelectorAll('.preview-row:not(.header)');
     previewRows.forEach(row => {
         row.addEventListener('mouseenter', () => {
-            row.style.background = 'rgba(0, 255, 255, 0.05)';
+            row.style.background = 'rgba(91, 110, 110, 0.05)';
             row.style.transform = 'translateX(5px)';
             row.style.transition = 'all 0.3s ease';
         });
