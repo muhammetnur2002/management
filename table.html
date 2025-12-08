@@ -18,10 +18,11 @@
             --grid-color: rgba(0, 255, 255, 0.1);
             --grid-line: rgba(0, 255, 255, 0.05);
             --primary-green: #00ff88;
-            --primary-blue: #0088ff;
+            --primary-blue: #00ff88;
             --warning-yellow: #ffaa00;
+            --warning-yellow: #00ff88;
             --error-red: #ff4444;
-            --critical-purple: #aa00ff;
+            --critical-purple: #00ff88;
             --background-dark: #0a0a12;
             --panel-dark: rgba(15, 15, 26, 0.9);
             --panel-light: rgba(30, 30, 46, 0.8);
@@ -455,14 +456,6 @@
             <i class="fas fa-arrow-left"></i>
             <span>НА ГЛАВНУЮ</span>
         </a>
-        <button id="printTable" class="nav-btn" onclick="printTable()">
-            <i class="fas fa-print"></i>
-            <span>ПЕЧАТЬ</span>
-        </button>
-        <button id="exportCSV" class="nav-btn" onclick="exportToCSV()">
-            <i class="fas fa-file-export"></i>
-            <span>ЭКСПОРТ CSV</span>
-        </button>
     </div>
     
     <!-- Основной контент -->
@@ -557,8 +550,8 @@
                             </td>
                             <td class="cell-status">
                                 <div class="status-badge pending">
-                                    <i class="fas fa-clock"></i>
-                                    <span>В РАБОТЕ</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>УТВЕРЖДЕНО</span>
                                 </div>
                             </td>
                         </tr>
@@ -584,8 +577,8 @@
                             </td>
                             <td class="cell-status">
                                 <div class="status-badge pending">
-                                    <i class="fas fa-clock"></i>
-                                    <span>В РАБОТЕ</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>УТВЕРЖДЕНО</span>
                                 </div>
                             </td>
                         </tr>
@@ -611,8 +604,8 @@
                             </td>
                             <td class="cell-status">
                                 <div class="status-badge planned">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>ПЛАНИРУЕТСЯ</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>УТВЕРЖДЕНО</span>
                                 </div>
                             </td>
                         </tr>
@@ -638,8 +631,8 @@
                             </td>
                             <td class="cell-status">
                                 <div class="status-badge planned">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>ПЛАНИРУЕТСЯ</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>УТВЕРЖДЕНО</span>
                                 </div>
                             </td>
                         </tr>
@@ -700,69 +693,6 @@
                 </table>
             </div>
         </section>
-
-        <!-- Футер таблицы -->
-        <footer class="table-footer-info">
-            <div class="footer-grid">
-                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
-                        <i class="fas fa-qrcode"></i>
-                        <span>ДОКУМЕНТ</span>
-                    </div>
-                    <div class="barcode">
-                        ████████████████████████████████████
-                    </div>
-                    <div style="font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--text-muted); text-align: center;">
-                        ID: BUD-UG-2025-001-TBL
-                    </div>
-                </div>
-                
-                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>СТАТУС</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <span style="color: var(--text-muted); font-size: 0.9rem;">Версия:</span>
-                            <strong style="color: var(--text-primary); font-family: 'Orbitron', sans-serif;">3.14</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <span style="color: var(--text-muted); font-size: 0.9rem;">Дата обновления:</span>
-                            <strong style="color: var(--text-primary);">05.12.2025</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-                            <span style="color: var(--text-muted); font-size: 0.9rem;">Уровень доступа:</span>
-                            <strong style="color: var(--error-red);">КОММЕРЧЕСКАЯ ТАЙНА</strong>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="footer-section" style="padding: 15px; border: 1px solid var(--border-glow); border-radius: 8px; background: rgba(0,0,0,0.3);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-green); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600;">
-                        <i class="fas fa-download"></i>
-                        <span>ЭКСПОРТ</span>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <button class="export-btn" onclick="exportToPDF()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                            <i class="fas fa-file-pdf" style="color: #f87171;"></i>
-                            <span>PDF</span>
-                        </button>
-                        <button class="export-btn" onclick="exportToExcel()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                            <i class="fas fa-file-excel" style="color: #4ade80;"></i>
-                            <span>Excel</span>
-                        </button>
-                        <button class="export-btn" onclick="exportToCSV()" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-glow); border-radius: 5px; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                            <i class="fas fa-file-csv" style="color: #38bdf8;"></i>
-                            <span>CSV</span>
-                        </button>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; justify-content: center;">
-                        <i class="fas fa-clock"></i>
-                        <span id="footer-time">05.12.2025 | 14:30:00</span>
-                    </div>
-                </div>
-            </div>
             
             <div class="copyright">
                 <i class="fas fa-satellite-dish" style="color: var(--primary-green); margin-right: 8px;"></i>
@@ -771,7 +701,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript прямо в HTML -->
     <script>
         // Установка дат
         document.addEventListener('DOMContentLoaded', function() {
@@ -879,7 +808,7 @@
             notification.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}" 
-                       style="color: ${type === 'success' ? 'var(--primary-green)' : 'var(--primary-blue)'};"></i>
+                        style="color: ${type === 'success' ? 'var(--primary-green)' : 'var(--primary-blue)'};"></i>
                     <span>${message}</span>
                 </div>
             `;
